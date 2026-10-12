@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <unordered_map>
+#include <typeinfo>
 
 int main() // função que inicia o programa, que retorna sempre um número inteiro quando finalizado
 {
@@ -10,7 +12,7 @@ int main() // função que inicia o programa, que retorna sempre um número inte
     std::string tarefa;
     std::string numero_tarefa;
     int numero;
-    std::vector<std::string> lista;
+    std::unordered_map<int, std::string> lista;
 
     while (true)
     {
@@ -23,40 +25,25 @@ int main() // função que inicia o programa, que retorna sempre um número inte
         if (comando == "add")
         {
             entrada >> tarefa;
+
             numero = lista.size() + 1;
-            lista.push_back(std::to_string(numero) + " " + tarefa);
-            std::cout << "Tarefa " << tarefa << " adicionada com sucesso! \n";
+            lista[numero] = tarefa;
+            std::cout << "Tarefa " << numero << ". " << tarefa << " adicionada com sucesso! \n";
         }
 
         if (comando == "list")
         {
-            for (const std::string &t : lista)
+            for (const auto &[numero, tarefa] : lista)
             {
-                std::cout << t << '\n';
+                std::cout << numero << ". " << tarefa << '\n';
             }
         }
 
         if (comando == "done")
         {
             entrada >> numero_tarefa;
-
-            for (std::string &t : lista)
-            {
-                size_t espaco = t.find(' ');
-
-                if (espaco != std::string::npos)
-                {
-                    t.erase(0, espaco + 1);
-
-                    if (t == numero_tarefa)
-                    {
-                    }
-                }
-                else
-                {
-                    t.clear();
-                }
-            }
+            int numero_tarefa_int = std::stoi(numero_tarefa);
+            lista.erase(numero_tarefa_int);
         }
         if (comando == "sair")
         {
